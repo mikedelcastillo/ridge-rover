@@ -1,0 +1,12 @@
+{
+  "name": "ridge-rover",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "git@github.com:mikedelcastillo/ridge-rover.git",
+  "author": "Mike del Castillo",
+  "license": "MIT",
+  "private": "true",
+  "workspaces": [
+    "./packages/serial"
+  ]
+}

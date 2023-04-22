@@ -1,0 +1,21 @@
+{
+  "name": "serial",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node ./build/index.js",
+    "start-ts": "ts-node ./src",
+    "build": "npx tsc",
+    "dev": "nodemon"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.13",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "serialport": "^10.5.0"
+  }
+}
