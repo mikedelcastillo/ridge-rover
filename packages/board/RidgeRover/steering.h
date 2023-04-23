@@ -42,7 +42,7 @@ private:
 
     int pulse = 0;
     SteeringPulseState pulseState = IDLE;
-    Timing tPulse{MICROS, 50};
+    Timing tPulse{MICROS, 25};
     Timing tRest{MILLIS, 1};
     Timing tIdle{MILLIS, 2500};
 
@@ -90,35 +90,56 @@ private:
     };
 
     int calibrateStep = 0;
+    int calibrateStepsLeft = 0;
+    Timing tCalibrate{MILLIS, 50};
     void updateCalibrate()
     {
         if (calibrateStep == 0)
         {
-            // Calibrate right
-            pulse = STEER_CALIBRATE_STEPS;
+            // Start calibrate right
+            calibrateStepsLeft = STEER_CALIBRATE_STEPS;
             calibrateStep = 1;
+            tCalibrate.reset();
         }
         else if (calibrateStep == 1)
         {
-            if (pulse == 0)
+            if (tCalibrate.poll())
             {
-                // Calibrate left
-                pulse = -STEER_CALIBRATE_STEPS;
-                calibrateStep = 2;
+                if (calibrateStepsLeft == 0)
+                {
+                    // Start calibrate left
+                    calibrateStepsLeft = STEER_CALIBRATE_STEPS;
+                    calibrateStep = 2;
+                    tCalibrate.reset();
+                }
+                else
+                {
+                    // Calibrate right
+                    pulse = 1;
+                    calibrateStepsLeft--;
+                }
             }
         }
         else if (calibrateStep == 2)
         {
-            if (pulse == 0)
+            if (tCalibrate.poll())
             {
-                // Done calibrating
-                setState(NORMAL);
+                if (calibrateStepsLeft == 0)
+                {
+                    // Complete calibration
+                    setState(NORMAL);
+                }
+                else
+                {
+                    pulse = -1;
+                    calibrateStepsLeft--;
+                }
             }
-        }
+        } 
     };
     void updateNormal()
     {
-        float tol = 0.05;
+        float tol = 0.025;
         float diff = targetSteer - currentSteer;
         if (diff > tol)
             pulse = 1;
