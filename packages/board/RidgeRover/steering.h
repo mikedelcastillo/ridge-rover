@@ -42,7 +42,7 @@ private:
 
     int pulse = 0;
     SteeringPulseState pulseState = IDLE;
-    Timing tPulse{MICROS, 25};
+    Timing tPulse{MICROS, 50};
     Timing tRest{MILLIS, 1};
     Timing tIdle{MILLIS, 2500};
 
@@ -91,7 +91,7 @@ private:
 
     int calibrateStep = 0;
     int calibrateStepsLeft = 0;
-    Timing tCalibrate{MILLIS, 50};
+    Timing tCalibrate{MILLIS, 25};
     void updateCalibrate()
     {
         if (calibrateStep == 0)
