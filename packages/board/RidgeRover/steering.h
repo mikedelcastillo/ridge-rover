@@ -40,6 +40,17 @@ private:
     float potRawValue;
     float potValue;
     Timing tPot{MILLIS, 5};
+    void readPot()
+    {
+        potRawValue = (float)analogRead(PIN_STEER_POT);
+        potValue = log(potRawValue) / log(10) * 10;
+        potMinValue = min(potMinValue, potValue);
+        potMaxValue = max(potMaxValue, potValue);
+        float range = potMaxValue - potMinValue;
+        float center = potMinValue + range / 2;
+        float diff = center - potValue;
+        currentSteer = diff / range * 2;
+    };
 
     SteeringState state;
 
@@ -177,17 +188,6 @@ public:
         else if (state == NORMAL)
         {
         }
-    };
-    void readPot()
-    {
-        potRawValue = (float)analogRead(PIN_STEER_POT);
-        potValue = log(potRawValue) / log(10) * 10;
-        potMinValue = min(potMinValue, potValue);
-        potMaxValue = max(potMaxValue, potValue);
-        float range = potMaxValue - potMinValue;
-        float center = potMinValue + range / 2;
-        float diff = center - potValue;
-        currentSteer = diff / range * 2;
     };
     void update()
     {
