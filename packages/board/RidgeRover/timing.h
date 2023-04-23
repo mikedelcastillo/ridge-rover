@@ -18,11 +18,11 @@ private:
     {
         if (type == MILLIS)
         {
-            return lastUpdate = millis();
+            return millis();
         }
         else if (type == MICROS)
         {
-            return lastUpdate = micros();
+            return micros();
         }
     };
 
