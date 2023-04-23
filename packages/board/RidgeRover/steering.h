@@ -43,7 +43,7 @@ private:
     int pulse = 0;
     SteeringPulseState pulseState = IDLE;
     Timing tPulse{MICROS, 50};
-    Timing tRest{MILLIS, 1};
+    Timing tRest{MILLIS, 5};
     Timing tIdle{MILLIS, 2500};
 
     void updatePulse()
@@ -139,7 +139,7 @@ private:
     };
     void updateNormal()
     {
-        float tol = 0.025;
+        float tol = 0.05;
         float diff = targetSteer - currentSteer;
         if (diff > tol)
             pulse = 1;
