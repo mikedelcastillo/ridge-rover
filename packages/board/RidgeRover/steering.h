@@ -134,6 +134,7 @@ private:
                 }
                 else
                 {
+                    // Calibrate left
                     pulse = -1;
                     calibrateStepsLeft--;
                 }
