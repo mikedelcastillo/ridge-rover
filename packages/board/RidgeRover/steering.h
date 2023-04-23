@@ -7,9 +7,14 @@
 #define PIN_STEER_POT A0
 
 #define STEER_MICROSTEPS 2;
-#define STEER_CALIBRATE_STEPS 50;
+#define STEER_CALIBRATE_STEPS 50 * STEER_MICROSTEPS;
 #define STEER_CALIBRATE_DELAY 50;
 #define STEER_TOLERANCE 0.05
+
+#define STEER_ENABLE LOW
+#define STEER_DISABLE HIGH
+#define STEER_LEFT HIGH
+#define STEER_RIGHT LOW
 
 enum SteeringState
 {
@@ -17,6 +22,12 @@ enum SteeringState
     NORMAL
 };
 
+enum SteeringPulseState
+{
+    IDLE,
+    RESTING,
+    PULSING,
+};
 
 class Steering
 {
@@ -27,14 +38,98 @@ private:
     float potRawValue;
     float potValue;
 
+    SteeringState state;
+
+    int pulse = 0;
+    SteeringPulseState pulseState = IDLE;
+    Timing tPulse{MICROS, 50};
+    Timing tRest{MILLIS, 1};
+    Timing tIdle{MILLIS, 2500};
+
+    void updatePulse()
+    {
+        if (pulseState == IDLE)
+        {
+            if (pulse == 0)
+            {
+                if (tIdle.poll())
+                {
+                    digitalWrite(PIN_STEER_ENA, STEER_DISABLE);
+                }
+            }
+            else
+            {
+                digitalWrite(PIN_STEER_ENA, STEER_ENABLE);
+                digitalWrite(PIN_STEER_DIR, pulse > 0 ? STEER_RIGHT : STEER_LEFT);
+                digitalWrite(PIN_STEER_PUL, HIGH);
+                tPulse.reset();
+                pulseState = PULSING;
+            }
+        }
+        else if (pulseState == PULSING)
+        {
+            if (tPulse.poll())
+            {
+                digitalWrite(PIN_STEER_PUL, LOW);
+                pulseState = RESTING;
+                tRest.reset();
+            }
+        }
+        else if (pulseState == RESTING)
+        {
+            if (tRest.poll())
+            {
+                if (pulse > 0)
+                    pulse--;
+                if (pulse < 0)
+                    pulse++;
+                pulseState = IDLE;
+                tIdle.reset();
+            }
+        }
+    };
+
+    int calibrateStep = 0;
+    void updateCalibrate()
+    {
+        if (calibrateStep == 0)
+        {
+            // Calibrate right
+            pulse = STEER_CALIBRATE_STEPS;
+            calibrateStep = 1;
+        }
+        else if (calibrateStep == 1)
+        {
+            if (pulse == 0)
+            {
+                // Calibrate left
+                pulse = -STEER_CALIBRATE_STEPS;
+                calibrateStep = 2;
+            }
+        }
+        else if (calibrateStep == 2)
+        {
+            if (pulse == 0)
+            {
+                // Done calibrating
+                setState(NORMAL);
+            }
+        }
+    };
+    void updateNormal()
+    {
+        float tol = 0.05;
+        float diff = targetSteer - currentSteer;
+        if (diff > tol)
+            pulse = 1;
+        if (diff < -tol)
+            pulse = -1;
+    };
+
+public:
     float currentSteer = 0;
     float targetSteer = 0;
 
-    SteeringState state;
-    Timing stepperTiming{MICROS, 100};
-
-    bool on = false;
-public:
     Steering()
     {
         pinMode(PIN_STEER_POT, INPUT);
@@ -52,6 +147,7 @@ public:
             potMaxValue = -1;
             potRawValue = 0;
             potValue = 0;
+            calibrateStep = 0;
         }
         else if (state == NORMAL)
         {
@@ -70,11 +166,21 @@ public:
     };
     void update()
     {
+        updatePulse();
         readPot();
-        if(stepperTiming.poll()){
-            digitalWrite(PIN_STEER_PUL, on ? HIGH : LOW);
-            on = !on;
-            stepperTiming.reset();
-        }
+        if (state == CALIBRATE)
+            updateCalibrate();
+        else if (state == NORMAL)
+            updateNormal();
+    };
+    void debug()
+    {
+        Serial.print(state);
+        Serial.print("\t");
+        Serial.print(pulse);
+        Serial.print("\t");
+        Serial.print(pulseState);
+        Serial.print("\t");
+        Serial.println(currentSteer);
     };
 };
