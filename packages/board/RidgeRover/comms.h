@@ -1,5 +1,7 @@
 #include <Arduino.h>
 
+#define COMMS_BYTE_STEER 83 // S
+#define COMMS_BYTE_THROTTLE 84 // T
 #define COMMS_FLOAT_BYTE_COUNT 16 // a to p
 #define COMMS_FLOAT_NEG_BYTE 97 // "a"
 #define COMMS_FLOAT_POS_BYTE 65 // "A"
