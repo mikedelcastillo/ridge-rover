@@ -166,7 +166,7 @@ public:
     float currentSteer = 0;
     float targetSteer = 0;
 
-    Steering()
+    setup()
     {
         pinMode(PIN_STEER_POT, INPUT);
         pinMode(PIN_STEER_ENA, OUTPUT);

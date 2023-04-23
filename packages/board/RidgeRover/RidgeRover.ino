@@ -1,19 +1,30 @@
 
 #include "steering.h"
+#include "comms.h"
 #include "timing.h"
 
 Steering steering;
-
-Timing debug(MILLIS, 10);
+Comms comms;
+Timing debug(MILLIS, 250);
 
 void setup()
 {
-  Serial.begin(115200);
-  Serial.println("START");
+  steering.setup();
+  comms.setup();
 }
 
-void loop(){
+void loop()
+{
+  comms.update();
+
   steering.update();
+  if (Serial.available() > 0)
+  {
+    float input = comms.parseRangeFloat(Serial.read());
+    steering.targetSteer = input;
+    Serial.println(input);
+  }
+
   if(debug.poll()){
     steering.debug();
   }
