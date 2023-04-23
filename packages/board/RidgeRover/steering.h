@@ -33,10 +33,13 @@ class Steering
 {
 
 private:
+    Timing tNormal{MICROS, 200};
+
     float potMinValue;
     float potMaxValue;
     float potRawValue;
     float potValue;
+    Timing tPot{MILLIS, 5};
 
     SteeringState state;
 
@@ -135,7 +138,7 @@ private:
                     calibrateStepsLeft--;
                 }
             }
-        } 
+        }
     };
     void updateNormal()
     {
@@ -188,10 +191,11 @@ public:
     void update()
     {
         updatePulse();
-        readPot();
+        if (tPot.poll())
+            readPot();
         if (state == CALIBRATE)
             updateCalibrate();
-        else if (state == NORMAL)
+        else if (state == NORMAL && tNormal.poll())
             updateNormal();
     };
     void debug()
