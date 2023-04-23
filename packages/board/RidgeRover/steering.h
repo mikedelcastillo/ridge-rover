@@ -9,7 +9,7 @@
 #define STEER_MICROSTEPS 2;
 #define STEER_CALIBRATE_STEPS 50 * STEER_MICROSTEPS;
 #define STEER_CALIBRATE_DELAY 50;
-#define STEER_TOLERANCE 0.05
+#define STEER_TOLERANCE 0.075 // 1/16*1.2
 
 #define STEER_ENABLE LOW
 #define STEER_DISABLE HIGH
@@ -33,8 +33,6 @@ class Steering
 {
 
 private:
-    Timing tNormal{MICROS, 200};
-
     float potMinValue;
     float potMaxValue;
     float potRawValue;
@@ -152,13 +150,16 @@ private:
             }
         }
     };
+
     void updateNormal()
     {
-        float tol = 0.05;
+        if (pulseState != IDLE)
+            return;
         float diff = targetSteer - currentSteer;
-        if (diff > tol)
+        if (diff > STEER_TOLERANCE)
             pulse = 1;
-        if (diff < -tol)
+
+        if (diff < -STEER_TOLERANCE)
             pulse = -1;
     };
 
@@ -166,7 +167,7 @@ public:
     float currentSteer = 0;
     float targetSteer = 0;
 
-    setup()
+    void setup()
     {
         pinMode(PIN_STEER_POT, INPUT);
         pinMode(PIN_STEER_ENA, OUTPUT);
@@ -189,6 +190,10 @@ public:
         {
         }
     };
+    void steerTo(float value)
+    {
+        targetSteer = value;
+    };
     void update()
     {
         updatePulse();
@@ -196,17 +201,17 @@ public:
             readPot();
         if (state == CALIBRATE)
             updateCalibrate();
-        else if (state == NORMAL && tNormal.poll())
+        else if (state == NORMAL)
             updateNormal();
     };
     void debug()
     {
-        Serial.print(state);
+        Serial.print(currentSteer);
         Serial.print("\t");
-        Serial.print(pulse);
+        Serial.print(targetSteer);
         Serial.print("\t");
-        Serial.print(pulseState);
+        Serial.print(currentSteer);
         Serial.print("\t");
-        Serial.println(currentSteer);
+        Serial.println(targetSteer);
     };
 };

@@ -5,7 +5,7 @@
 
 Steering steering;
 Comms comms;
-Timing debug(MILLIS, 250);
+Timing debug(MILLIS, 10);
 
 void setup()
 {
