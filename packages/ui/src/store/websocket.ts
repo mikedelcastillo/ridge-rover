@@ -1,12 +1,12 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
 export enum WebSocketStatus {
-    DISCONNECTED="DISCONNECTED",
-    CONNECTING="CONNECTING",
-    CONNECTED="CONNECTED",
+    DISCONNECTED = "DISCONNECTED",
+    CONNECTING = "CONNECTING",
+    CONNECTED = "CONNECTED",
 }
 
-export type WebSocketState = {
+export type WebSocketStoreState = {
     status: WebSocketStatus,
     ip: string,
     ping: number,
@@ -15,7 +15,7 @@ export type WebSocketState = {
 
 const { hostname, hash } = window.location
 
-const initialState: WebSocketState = {
+const initialState: WebSocketStoreState = {
     status: WebSocketStatus.DISCONNECTED,
     ip: hash.substring(1) || hostname,
     ping: 0,
@@ -26,13 +26,9 @@ export const websocketSlice = createSlice({
     name: "websocket",
     initialState,
     reducers: {
-        setStatus: (state, action: PayloadAction<WebSocketState["status"]>) => 
-        {state.status = action.payload},
-        setIp: (state, action: PayloadAction<WebSocketState["ip"]>) => 
-        {state.ip = action.payload},
-        setPing: (state, action: PayloadAction<WebSocketState["ping"]>) => 
-        {state.ping = action.payload},
-        setLastPing: (state, action: PayloadAction<WebSocketState["lastPing"]>) => 
-        {state.lastPing = action.payload},
+        setStatus: (state, action: PayloadAction<WebSocketStoreState["status"]>) => { state.status = action.payload },
+        setIp: (state, action: PayloadAction<WebSocketStoreState["ip"]>) => { state.ip = action.payload },
+        setPing: (state, action: PayloadAction<WebSocketStoreState["ping"]>) => { state.ping = action.payload },
+        setLastPing: (state, action: PayloadAction<WebSocketStoreState["lastPing"]>) => { state.lastPing = action.payload },
     },
 })

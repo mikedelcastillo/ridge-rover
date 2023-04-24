@@ -6,7 +6,10 @@ export const BYTE_ZERO = String.fromCharCode(COMMS_FLOAT_ZERO_BYTE)
 export const COMMS_FLOAT_NEG_BYTE = 97 // "a"
 export const COMMS_FLOAT_POS_BYTE = 65 // "A"
 
-export const BYTE_PING = "."
+export const STEERING_STATE_CALIBRATE_BYTE = "C"
+export const STEERING_STATE_NORMAL_BYTE = "N"
 
+export const BYTE_PING = "."
 export const BYTE_MOVE = "~"
+export const BYTE_BOARD_TX = "%"
 

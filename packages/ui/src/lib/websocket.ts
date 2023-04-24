@@ -1,6 +1,8 @@
 import { store } from "../store"
+import { boardSlice } from "../store/board"
 import { WebSocketStatus, websocketSlice } from "../store/websocket"
-import {DEFAULT_PORT, BYTE_PING} from "@ridge-rover/api/src/constants.ts"
+import { DEFAULT_PORT, BYTE_PING, BYTE_BOARD_TX } from "@ridge-rover/api/src/constants.ts"
+import { parseBoardSerial } from "@ridge-rover/api/src/lib/bytes"
 
 export let ws: WebSocket | undefined
 
@@ -8,14 +10,14 @@ let pingInterval: NodeJS.Timer | undefined
 
 export const connectWebSocket = () => {
     const state = store.getState()
-    if(state.websocket.status !== WebSocketStatus.DISCONNECTED) return
+    if (state.websocket.status !== WebSocketStatus.DISCONNECTED) return
     store.dispatch(websocketSlice.actions.setStatus(
         WebSocketStatus.CONNECTING
     ))
 
     ws = new WebSocket(`ws://${state.websocket.ip}:${DEFAULT_PORT}`)
     ws.addEventListener("open", () => {
-        if(typeof pingInterval === "undefined"){
+        if (typeof pingInterval === "undefined") {
             pingInterval = setInterval(sendPing, 1000 / 4)
         }
         store.dispatch(websocketSlice.actions.setStatus(
@@ -38,14 +40,14 @@ export const connectWebSocket = () => {
 
 export const isWsReady = () => {
     const state = store.getState()
-    if(state.websocket.status !== WebSocketStatus.CONNECTED) return false
-    if(typeof ws === "undefined") return false
-    if(ws.readyState !== WebSocket.OPEN) return false
+    if (state.websocket.status !== WebSocketStatus.CONNECTED) return false
+    if (typeof ws === "undefined") return false
+    if (ws.readyState !== WebSocket.OPEN) return false
     return true
 }
 
 export const sendPing = () => {
-    if(!isWsReady()) return
+    if (!isWsReady()) return
     ws?.send(BYTE_PING)
     const now = Date.now()
     store.dispatch(websocketSlice.actions.setLastPing(now))
@@ -53,9 +55,14 @@ export const sendPing = () => {
 
 export const handleMessage = (data: string) => {
     const state = store.getState()
-    if(data === BYTE_PING){
+    if (data === BYTE_PING) {
         const now = Date.now()
         store.dispatch(websocketSlice.actions.setPing(now -
             state.websocket.lastPing))
+    }
+
+    if (data.startsWith(BYTE_BOARD_TX)) {
+        const boardState = parseBoardSerial(data)
+        store.dispatch(boardSlice.actions.setState(boardState))
     }
 }

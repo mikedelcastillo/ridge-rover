@@ -1,38 +1,22 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
+import { BoardState, SteeringState } from "@ridge-rover/api/src/types"
 
-export enum WebSocketStatus {
-    DISCONNECTED="DISCONNECTED",
-    CONNECTING="CONNECTING",
-    CONNECTED="CONNECTED",
+export type BoardStoreState = {
+    state: BoardState,
 }
 
-export type WebSocketState = {
-    status: WebSocketStatus,
-    ip: string,
-    ping: number,
-    lastPing: number,
+const initialState: BoardStoreState = {
+    state: {
+        steerState: SteeringState.CALIBRATE,
+        currentSteer: 0,
+        targetSteer: 0,
+    },
 }
 
-const { hostname, hash } = window.location
-
-const initialState: WebSocketState = {
-    status: WebSocketStatus.DISCONNECTED,
-    ip: hash.substring(1) || hostname,
-    ping: 0,
-    lastPing: Date.now(),
-}
-
-export const websocketSlice = createSlice({
-    name: "websocket",
+export const boardSlice = createSlice({
+    name: "board",
     initialState,
     reducers: {
-        setStatus: (state, action: PayloadAction<WebSocketState["status"]>) => 
-        {state.status = action.payload},
-        setIp: (state, action: PayloadAction<WebSocketState["ip"]>) => 
-        {state.ip = action.payload},
-        setPing: (state, action: PayloadAction<WebSocketState["ping"]>) => 
-        {state.ping = action.payload},
-        setLastPing: (state, action: PayloadAction<WebSocketState["lastPing"]>) => 
-        {state.lastPing = action.payload},
+        setState: (state, action: PayloadAction<BoardStoreState["state"]>) => { state.state = action.payload },
     },
 })

@@ -1,12 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit"
-import { WebSocketState, websocketSlice } from "./websocket"
+import { WebSocketStoreState, websocketSlice } from "./websocket"
+import { BoardStoreState, boardSlice } from "./board"
 
 export type StoreState = {
-  websocket: WebSocketState,
+  websocket: WebSocketStoreState,
+  board: BoardStoreState,
 }
 
 export const store = configureStore<StoreState>({
     reducer: {
         websocket: websocketSlice.reducer,
+        board: boardSlice.reducer,
     }
 })
