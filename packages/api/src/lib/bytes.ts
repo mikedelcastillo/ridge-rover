@@ -27,7 +27,7 @@ export const parseBoardSerial = (line: string): BoardState => {
     const steerState = line[0] === SteeringState.NORMAL ?
         SteeringState.NORMAL : SteeringState.CALIBRATE
     const currentSteer = byteToRange(line[1] || BYTE_ZERO)
-    const targetSteer = byteToRange(line[1] || BYTE_ZERO)
+    const targetSteer = byteToRange(line[2] || BYTE_ZERO)
 
     return {
         steerState, currentSteer, targetSteer,
