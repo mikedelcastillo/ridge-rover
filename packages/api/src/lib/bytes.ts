@@ -1,4 +1,14 @@
-import { COMMS_FLOAT_BYTE_COUNT, COMMS_FLOAT_NEG_BYTE, COMMS_FLOAT_POS_BYTE } from "../constants"
+import { BYTE_ZERO, COMMS_FLOAT_BYTE_COUNT, COMMS_FLOAT_NEG_BYTE, COMMS_FLOAT_POS_BYTE, COMMS_FLOAT_ZERO_BYTE } from "../constants"
+
+export const byteToRange = (byte: string) => {
+    const charCode = byte.charCodeAt(0)
+    if(charCode === COMMS_FLOAT_ZERO_BYTE) return 0
+    if(charCode >= COMMS_FLOAT_NEG_BYTE && charCode < COMMS_FLOAT_NEG_BYTE + COMMS_FLOAT_BYTE_COUNT)
+        return (charCode - COMMS_FLOAT_NEG_BYTE) / COMMS_FLOAT_BYTE_COUNT
+    if(charCode >= COMMS_FLOAT_POS_BYTE && charCode < COMMS_FLOAT_POS_BYTE + COMMS_FLOAT_BYTE_COUNT)
+        return (charCode - COMMS_FLOAT_POS_BYTE) / COMMS_FLOAT_BYTE_COUNT
+    return 0
+}
 
 export const rangeToByte = (range: number): string => {
     range = Math.max(-1, Math.min(1, range))
@@ -11,7 +21,13 @@ export const rangeToByte = (range: number): string => {
     return "0"
 }
 
-export const parseMove = (data: string) => {
-    const steerByte = data[1]
-    const throttleByte = data[2]
+export const parseLine = (line: string) => {
+    const steerState = line[0]
+    const currentSteer = byteToRange(line[1] || BYTE_ZERO)
+    const targetSteer = byteToRange(line[1] || BYTE_ZERO)
+
+    return {
+        steerState, currentSteer, targetSteer,
+    }
 }
+

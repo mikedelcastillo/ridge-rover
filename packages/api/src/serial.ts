@@ -6,12 +6,5 @@ export const board = new SerialPort({
     autoOpen: false,
 })
 
-board.on("error", (error) => {
-    console.error(error)
-    process.exit()
-})
-
-board.on("close", () => {
-    console.warn("Board closed")
-    process.exit()
-})
+export const boardParser = new ReadlineParser()
+board.pipe(boardParser)

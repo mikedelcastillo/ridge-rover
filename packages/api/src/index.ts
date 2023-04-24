@@ -1,6 +1,7 @@
 import { WebSocketServer } from "ws"
 import { BYTE_PING, DEFAULT_PORT } from "./constants"
-import { board } from "./serial"
+import { board, boardParser } from "./serial"
+import { parseLine } from "./lib/bytes"
 
 console.log(`Connecting to board...`)
 board.open((error) => {
@@ -20,7 +21,9 @@ board.open((error) => {
         })
     })
 
-    board.on("data", (chunk) => {
-        console.log(`SERIAL: ${chunk}`)
+    boardParser.on("data", (line: string) => {
+        const data = parseLine(line)
+        console.clear();
+        console.log(data);
     })
 })
