@@ -18,8 +18,8 @@
 
 enum SteeringState
 {
-    STEER_CALIBRATE,
-    STEER_NORMAL
+    STEER_CALIBRATE = 'C',
+    STEER_NORMAL = 'N',
 };
 
 enum SteeringPulseState
@@ -49,8 +49,6 @@ private:
         float diff = center - potValue;
         currentSteer = diff / range * 2;
     };
-
-    SteeringState state;
 
     int pulse = 0;
     SteeringPulseState pulseState = STEER_IDLE;
@@ -166,6 +164,8 @@ private:
 public:
     float currentSteer = 0;
     float targetSteer = 0;
+
+    SteeringState state;
 
     void setup()
     {

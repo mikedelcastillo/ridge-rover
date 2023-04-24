@@ -15,12 +15,13 @@ void setup()
 void loop()
 {
   comms.update();
-  communicate();
+  receive();
+  transmit();
 
   steering.update();
 }
 
-void communicate()
+void receive()
 {
   CommType type = comms.getType();
   if (comms.is(BYTE_MOVE, 3))
@@ -37,4 +38,17 @@ void communicate()
   }
   if (comms.is(BYTE_IGNORE))
     comms.flush();
+}
+
+Timing tTransmit{TIMING_MILLIS, 20};
+
+void transmit()
+{
+  if (!tTransmit.poll())
+    return;
+
+  Serial.print((char) steering.state);
+  Serial.print((char) comms.encodeFloatRange(steering.currentSteer));
+  Serial.print((char) comms.encodeFloatRange(steering.targetSteer));
+  Serial.print("\n");
 }

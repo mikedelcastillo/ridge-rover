@@ -30,7 +30,6 @@ public:
     void setup()
     {
         Serial.begin(115200);
-        Serial.println("START");
     };
     float parseRangeFloat(int byte)
     {
@@ -41,6 +40,16 @@ public:
         if (byte >= COMMS_FLOAT_POS_BYTE && byte < COMMS_FLOAT_POS_BYTE + COMMS_FLOAT_BYTE_COUNT)
             return ((float)byte - (float)COMMS_FLOAT_POS_BYTE + 1) / (float)COMMS_FLOAT_BYTE_COUNT;
         return 0.0;
+    };
+    char encodeFloatRange(float data){
+        float range = max(-1.0, min(1.0, data));
+        int sign = range / abs(range);
+        int index = round(abs(range) * COMMS_FLOAT_BYTE_COUNT);
+        if(index != 0){
+            int offset = sign > 0 ? COMMS_FLOAT_POS_BYTE : COMMS_FLOAT_NEG_BYTE;
+            return offset + index - 1;
+        }
+        return COMMS_FLOAT_ZERO_BYTE;
     };
     void update()
     {
