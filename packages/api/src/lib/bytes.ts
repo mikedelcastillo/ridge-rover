@@ -5,9 +5,9 @@ export const byteToRange = (byte: string) => {
     const charCode = byte.charCodeAt(0)
     if (charCode === COMMS_FLOAT_ZERO_BYTE) return 0
     if (charCode >= COMMS_FLOAT_NEG_BYTE && charCode < COMMS_FLOAT_NEG_BYTE + COMMS_FLOAT_BYTE_COUNT)
-        return (charCode - COMMS_FLOAT_NEG_BYTE) / COMMS_FLOAT_BYTE_COUNT
+        return -(charCode - COMMS_FLOAT_NEG_BYTE) / COMMS_FLOAT_BYTE_COUNT
     if (charCode >= COMMS_FLOAT_POS_BYTE && charCode < COMMS_FLOAT_POS_BYTE + COMMS_FLOAT_BYTE_COUNT)
-        return -(charCode - COMMS_FLOAT_POS_BYTE) / COMMS_FLOAT_BYTE_COUNT
+        return (charCode - COMMS_FLOAT_POS_BYTE) / COMMS_FLOAT_BYTE_COUNT
     return 0
 }
 
