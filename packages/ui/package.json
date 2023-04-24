@@ -1,5 +1,5 @@
 {
-  "name": "ui",
+  "name": "@ridge-rover/ui",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -15,6 +15,9 @@
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
     "sass": "^1.62.0"
+  },
+  "peerDependencies": {
+    "@ridge-rover/api": "*"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

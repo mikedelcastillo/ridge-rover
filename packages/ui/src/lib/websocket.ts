@@ -1,5 +1,6 @@
 import { store } from "../store"
 import { WebSocketStatus, websocketSlice } from "../store/websocket"
+import {DEFAULT_PORT, BYTE_PING} from "@ridge-rover/api/src/constants.ts"
 
 export let ws: WebSocket | undefined
 
@@ -12,7 +13,7 @@ export const connectWebSocket = () => {
         WebSocketStatus.CONNECTING
     ))
 
-    ws = new WebSocket(`ws://${state.websocket.ip}:5000`)
+    ws = new WebSocket(`ws://${state.websocket.ip}:${DEFAULT_PORT}`)
     ws.addEventListener("open", () => {
         if(typeof pingInterval === "undefined"){
             pingInterval = setInterval(sendPing, 1000 / 4)
@@ -45,14 +46,14 @@ export const isWsReady = () => {
 
 export const sendPing = () => {
     if(!isWsReady()) return
-    ws?.send("p")
+    ws?.send(BYTE_PING)
     const now = Date.now()
     store.dispatch(websocketSlice.actions.setLastPing(now))
 }
 
 export const handleMessage = (data: string) => {
     const state = store.getState()
-    if(data === "p"){
+    if(data === BYTE_PING){
         const now = Date.now()
         store.dispatch(websocketSlice.actions.setPing(now -
             state.websocket.lastPing))

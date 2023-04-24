@@ -1,4 +1,3 @@
-import React from "react"
 import { useSelector } from "react-redux"
 import { connectWebSocket } from "./lib/websocket"
 import { StoreState } from "./store"

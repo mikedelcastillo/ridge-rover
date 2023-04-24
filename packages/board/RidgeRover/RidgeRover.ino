@@ -17,13 +17,15 @@ void loop()
 {
   comms.update();
 
-  steering.update();
-  if (Serial.available() > 0)
-  {
-    float input = comms.parseRangeFloat(Serial.read());
-    steering.targetSteer = input;
-    Serial.println(input);
+  CommType type = comms.getType();
+  if(type == MOVE && comms.bufferLength == 3){
+    float steer = comms.parseRangeFloat(comms.buffer[1]);
+    float throttle = comms.parseRangeFloat(comms.buffer[2]);
+    steering.targetSteer = steer;
+    comms.flush();
   }
+
+  steering.update();
 
   if(debug.poll()){
     steering.debug();
