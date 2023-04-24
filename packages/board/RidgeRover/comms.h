@@ -7,19 +7,21 @@
 
 enum CommType
 {
-    MOVE,
-    IGNORE,
+    BYTE_MOVE,
+    BYTE_CALIBRATE,
+    BYTE_IGNORE,
 };
 
 class Comms
 {
 private:
 public:
-    int buffer[16];
+    int buffer[4];
     int bufferLength = 0;
     void push(int byte)
     {
         buffer[bufferLength] = byte;
+        bufferLength++;
     };
     void flush()
     {
@@ -51,12 +53,34 @@ public:
     CommType getType()
     {
         if (bufferLength == 0)
-            return IGNORE;
+            return BYTE_IGNORE;
 
         int byte = buffer[0];
         if (byte == 126) // ~
-            return MOVE;
+            return BYTE_MOVE;
+        if (byte == 33) // !
+            return BYTE_CALIBRATE;
 
-        return IGNORE;
+        return BYTE_IGNORE;
+    };
+    bool is(CommType type)
+    {
+        return type == getType();
+    };
+    bool is(CommType type, int length)
+    {
+        return type == getType() && bufferLength == length;
+    };
+    void debug()
+    {
+        if (bufferLength > 0)
+        {
+            for (int i = 0; i < bufferLength; i++)
+            {
+                Serial.print(buffer[i]);
+                Serial.print("\t");
+            }
+            Serial.print("\n");
+        }
     };
 };

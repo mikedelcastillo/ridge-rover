@@ -4,8 +4,8 @@
 #include <Arduino.h>
 enum TimingType
 {
-    MILLIS,
-    MICROS,
+    TIMING_MILLIS,
+    TIMING_MICROS,
 };
 
 class Timing
@@ -16,11 +16,11 @@ private:
     TimingType type;
     unsigned long getNow()
     {
-        if (type == MILLIS)
+        if (type == TIMING_MILLIS)
         {
             return millis();
         }
-        else if (type == MICROS)
+        else if (type == TIMING_MICROS)
         {
             return micros();
         }
