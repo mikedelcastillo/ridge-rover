@@ -2,7 +2,7 @@ import { store } from "../store"
 import { boardSlice } from "../store/board"
 import { WebSocketStatus, websocketSlice } from "../store/websocket"
 import { DEFAULT_PORT, BYTE_PING, BYTE_BOARD_TX } from "@ridge-rover/api/src/constants.ts"
-import { parseBoardSerial } from "@ridge-rover/api/src/lib/bytes"
+import { formatMove, parseBoardSerial } from "@ridge-rover/api/src/lib/bytes"
 
 export let ws: WebSocket | undefined
 
@@ -65,4 +65,10 @@ export const handleMessage = (data: string) => {
         const boardState = parseBoardSerial(data)
         store.dispatch(boardSlice.actions.setState(boardState))
     }
+}
+
+export const sendMove = (...params: Parameters<typeof formatMove>) => {
+    if (!isWsReady()) return
+    const message = formatMove(...params)
+    ws?.send(message)
 }

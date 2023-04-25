@@ -10,6 +10,7 @@ const initialState: BoardStoreState = {
         steerState: SteeringState.CALIBRATE,
         currentSteer: 0,
         targetSteer: 0,
+        targetThrottle: 0,
     },
 }
 

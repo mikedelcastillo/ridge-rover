@@ -1,4 +1,4 @@
-import { BYTE_BOARD_TX, BYTE_ZERO, COMMS_FLOAT_BYTE_COUNT, COMMS_FLOAT_NEG_BYTE, COMMS_FLOAT_POS_BYTE, COMMS_FLOAT_ZERO_BYTE } from "../constants"
+import { BYTE_BOARD_TX, BYTE_MOVE, BYTE_ZERO, COMMS_FLOAT_BYTE_COUNT, COMMS_FLOAT_NEG_BYTE, COMMS_FLOAT_POS_BYTE, COMMS_FLOAT_ZERO_BYTE } from "../constants"
 import { BoardState, SteeringState } from "../types"
 
 export const byteToRange = (byte: string) => {
@@ -35,3 +35,9 @@ export const parseBoardSerial = (line: string): BoardState => {
     }
 }
 
+export const formatMove = (targetSteer: number, targetThrottle: number): string => {
+    let output = BYTE_MOVE
+    output += rangeToByte(targetSteer)
+    output += rangeToByte(targetThrottle)
+    return output
+}
