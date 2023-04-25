@@ -21,7 +21,7 @@ const getSteerCss = (angle: number) => ({
 export const WheelViz: FC = () => {
     const state = useSelector((state: StoreState) => state)
 
-    const steer = state.board.state.targetSteer
+    const steer = state.board.state.currentSteer
     const throttle = state.board.state.targetThrottle
 
     const bgStyle = {

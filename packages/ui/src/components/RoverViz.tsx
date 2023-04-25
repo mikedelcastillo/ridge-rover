@@ -11,7 +11,7 @@ export const RoverViz: FC = () => {
             <RangeViz
                 className="steer-viz"
                 targetValue={state.input.steerTarget}
-                actualValue={state.board.state.targetSteer} />
+                actualValue={state.board.state.currentSteer} />
             <RangeViz
                 className="throttle-viz"
                 targetValue={-state.input.throttleTarget}
