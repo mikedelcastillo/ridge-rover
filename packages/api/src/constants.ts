@@ -12,4 +12,5 @@ export const STEERING_STATE_NORMAL_BYTE = "N"
 export const BYTE_PING = "."
 export const BYTE_MOVE = "~"
 export const BYTE_BOARD_TX = "%"
+export const BYTE_OS = "*"
 

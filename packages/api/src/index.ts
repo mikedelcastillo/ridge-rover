@@ -1,6 +1,8 @@
 import { WebSocketServer } from "ws"
-import { BYTE_BOARD_TX, BYTE_MOVE, BYTE_PING, DEFAULT_PORT } from "./constants"
+import osu, { mem } from "node-os-utils"
+import { BYTE_BOARD_TX, BYTE_MOVE, BYTE_OS, BYTE_PING, DEFAULT_PORT } from "./constants"
 import { board, boardParser } from "./serial"
+import { rangeToByte } from "./lib/bytes"
 
 console.log("Connecting to board...")
 board.open((error) => {
@@ -25,4 +27,17 @@ board.open((error) => {
             ws.send(BYTE_BOARD_TX + line)
         }
     })
+
+    setInterval(async () => {
+        const cpuPercent = (await osu.cpu.usage()) / 100
+        const memUsage = (await mem.info()).usedMemPercentage / 100
+        const message = [
+            BYTE_OS,
+            rangeToByte(cpuPercent),
+            rangeToByte(memUsage),
+        ].join("")
+        for (const ws of wss.clients) {
+            ws.send(message)
+        }
+    }, 500)
 })
