@@ -3,24 +3,31 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 type Stat = {
     title: string,
     stringify: (value: number) => string,
-    min?: number, max?: number, capacity: number,
+    min: number, max: number, capacity: number,
 }
 
-const STATS = {
+const motionCapacity = 60 * 5
+
+export const STATS = {
+    throttle: {
+        title: "Input Throttle",
+        stringify: n => `${Math.abs(Math.round(n * 100))}%`,
+        min: -1, max: 1, capacity: motionCapacity,
+    },
     steer: {
-        title: "Steer",
+        title: "Input Steer",
         stringify: n => `${Math.round(n * 45)}°`,
-        min: -1, max: 1, capacity: 60 * 20,
+        min: -1, max: 1, capacity: motionCapacity,
+    },
+    actualSteer: {
+        title: "Current Steer",
+        stringify: n => `${Math.round(n * 45)}°`,
+        min: -1, max: 1, capacity: motionCapacity,
     },
     steerResistance: {
-        title: "Resistance",
+        title: "Steer Resistance",
         stringify: n => `${Math.round(n * 45)}°`,
-        min: -1, max: 1, capacity: 60 * 20,
-    },
-    throttle: {
-        title: "Throttle",
-        stringify: n => `${Math.abs(Math.round(n * 100))}%`,
-        min: -1, max: 1, capacity: 60 * 20,
+        min: -1, max: 1, capacity: motionCapacity,
     },
     cpu: {
         title: "CPU",
@@ -29,8 +36,8 @@ const STATS = {
     },
     ram: {
         title: "RAM",
-        stringify: n => `${n.toFixed(2)}GB`,
-        min: 0, capacity: 30,
+        stringify: n => `${Math.round(n)}%`,
+        min: 0, max: 1, capacity: 30,
     },
 } satisfies Record<string, Stat>
 

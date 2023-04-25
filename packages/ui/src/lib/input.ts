@@ -42,6 +42,7 @@ const loop = () => {
 
     store.dispatch(statsSlice.actions.log({ id: "steer", value: steerTarget }))
     store.dispatch(statsSlice.actions.log({ id: "steerResistance", value: steerTarget - store.getState().board.state.currentSteer }))
+    store.dispatch(statsSlice.actions.log({ id: "actualSteer", value: store.getState().board.state.currentSteer }))
     store.dispatch(statsSlice.actions.log({ id: "throttle", value: throttleTarget }))
     store.dispatch(inputSlice.actions.setState({ steerTarget, throttleTarget }))
     sendMove(steerTarget, throttleTarget)
