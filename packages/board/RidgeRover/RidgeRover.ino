@@ -1,14 +1,17 @@
 
 #include "steering.h"
+#include "throttle.h"
 #include "comms.h"
 #include "timing.h"
 
 Steering steering;
+Throttle throttle;
 Comms comms;
 
 void setup()
 {
   steering.setup();
+  throttle.setup();
   comms.setup();
 }
 
@@ -19,6 +22,7 @@ void loop()
   transmit();
 
   steering.update();
+  throttle.update();
 }
 
 void receive()
@@ -26,9 +30,10 @@ void receive()
   CommType type = comms.getType();
   if (comms.is(BYTE_MOVE, 3))
   {
-    float steer = comms.parseRangeFloat(comms.buffer[1]);
-    float throttle = comms.parseRangeFloat(comms.buffer[2]);
-    steering.targetSteer = steer;
+    float steerValue = comms.parseRangeFloat(comms.buffer[1]);
+    float throttleValue = comms.parseRangeFloat(comms.buffer[2]);
+    steering.targetSteer = steerValue;
+    throttle.targetThrottle = throttleValue;
     comms.flush();
   }
   if (comms.is(BYTE_CALIBRATE))
