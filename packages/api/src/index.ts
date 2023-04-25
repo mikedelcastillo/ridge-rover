@@ -1,5 +1,5 @@
 import { WebSocketServer } from "ws"
-import { BYTE_BOARD_TX, BYTE_PING, DEFAULT_PORT } from "./constants"
+import { BYTE_BOARD_TX, BYTE_MOVE, BYTE_PING, DEFAULT_PORT } from "./constants"
 import { board, boardParser } from "./serial"
 import { parseBoardSerial } from "./lib/bytes"
 
@@ -15,9 +15,9 @@ board.open((error) => {
 
     wss.on("connection", (ws) => {
         ws.on("message", (binary) => {
-            const data = binary.toString()
+            const data = binary.toString().trim()
             if (data === BYTE_PING) ws.send(BYTE_PING)
-
+            if (data.startsWith(BYTE_MOVE)) ws.send(data)
         })
     })
 
