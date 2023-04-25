@@ -31,13 +31,13 @@ export const STATS = {
     },
     cpu: {
         title: "CPU",
-        stringify: n => `${Math.round(n)}%`,
-        min: 0, max: 100, capacity: 30,
+        stringify: n => `${Math.round(n * 100)}%`,
+        min: 0, max: 1, capacity: 100,
     },
     ram: {
         title: "RAM",
-        stringify: n => `${Math.round(n)}%`,
-        min: 0, max: 1, capacity: 30,
+        stringify: n => `${Math.round(n * 100)}%`,
+        min: 0, max: 1, capacity: 100,
     },
 } satisfies Record<string, Stat>
 

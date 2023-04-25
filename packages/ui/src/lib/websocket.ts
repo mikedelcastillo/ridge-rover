@@ -1,8 +1,9 @@
 import { store } from "../store"
 import { boardSlice } from "../store/board"
+import { statsSlice } from "../store/stats"
 import { WebSocketStatus, websocketSlice } from "../store/websocket"
-import { DEFAULT_PORT, BYTE_PING, BYTE_BOARD_TX } from "@ridge-rover/api/src/constants.ts"
-import { formatMove, parseBoardSerial } from "@ridge-rover/api/src/lib/bytes"
+import { DEFAULT_PORT, BYTE_PING, BYTE_BOARD_TX, BYTE_OS } from "@ridge-rover/api/src/constants.ts"
+import { byteToRange, formatMove, parseBoardSerial } from "@ridge-rover/api/src/lib/bytes"
 
 export let ws: WebSocket | undefined
 
@@ -64,6 +65,13 @@ export const handleMessage = (data: string) => {
     if (data.startsWith(BYTE_BOARD_TX)) {
         const boardState = parseBoardSerial(data)
         store.dispatch(boardSlice.actions.setState(boardState))
+    }
+
+    if (data.startsWith(BYTE_OS)) {
+        const cpu = byteToRange(data[1])
+        const mem = byteToRange(data[2])
+        store.dispatch(statsSlice.actions.log({ id: "cpu", value: cpu }))
+        store.dispatch(statsSlice.actions.log({ id: "ram", value: mem }))
     }
 }
 
