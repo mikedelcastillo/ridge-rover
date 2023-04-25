@@ -1,25 +1,11 @@
-import { useSelector } from "react-redux"
-import { connectWebSocket } from "./lib/websocket"
-import { StoreState } from "./store"
+import { Header } from "./components/Header"
+import { RoverViz } from "./components/RoverViz"
 
 function App() {
-    const state = useSelector((state: StoreState) => state)
-
-    const connect = () => {
-        connectWebSocket()
-    }
-
     return (
         <>
-            <pre>{JSON.stringify({
-                status: state.websocket.status,
-                ip: state.websocket.ip,
-                ping: state.websocket.ping,
-                lastPing: state.websocket.lastPing,
-                boardState: state.board.state,
-                inputStatE: state.input,
-            }, null, 2)}</pre>
-            <button onClick={connect}>Connect</button>
+            <Header />
+            <RoverViz />
         </>
     )
 }

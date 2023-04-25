@@ -1,0 +1,132 @@
+@import variables
+
+html, body, #root
+  margin: 0
+  width: 100%
+  height: 100%
+  font-size: $font-size-default
+  background-color: $color-bg
+  color: $color-text
+
+*
+  box-sizing: border-box
+  font-family: "IBM Plex Mono", monospace
+  position: relative
+
+.header
+  display: flex
+  justify-content: space-between
+  align-items: center
+  border-bottom: 1px solid $color-border
+  padding: 1em 2em
+
+  .left
+    text-transform: uppercase
+    font-weight: 700
+  
+  .right
+    display: flex
+    justify-content: space-between
+    align-items: center
+    gap: 0.5em
+
+    .dot
+      $size: 8px
+      width: $size
+      height: $size
+      border-radius: $size
+      
+      &.disconnected
+        background-color: #ff0000
+      &.connecting
+        background-color: #ffd900
+      &.connected
+        background-color: #00ff00
+
+.rover-viz
+  $width: 350px
+  $height: 400px
+  width: $width
+  height: $height
+
+  transform: translate(-50%, -50%)
+  top: 45%
+  left: 50%
+
+  .range-viz
+
+    &.steer-viz
+      transform: translate(-50%, -50%)
+      top: 10%
+      left: 50%
+
+    &.throttle-viz
+      transform: translate(-50%, -50%) rotate(90deg)
+      top: 50%
+      left: 15%
+
+  .wheel-viz
+    position: absolute
+    transform: translate(-50%, -50%)
+    top: 60%
+    left: 60%
+
+.range-viz
+  $height: 16px
+  $needle-size: calc(#{$height} - 4px)
+
+  width: 256px
+  border: 1px solid $color-border
+  height: $height
+  border-radius: $height
+  overflow: hidden
+  padding: $height*0.5
+
+  .needle
+    position: absolute
+    top: 50%
+    width: $needle-size
+    height: $needle-size
+    border-radius: $needle-size
+    transform: translate(-50%, -50%)
+
+    &.target
+      background-color: $color-border
+    &.actual
+      border: 2px solid $color-main
+
+.wheel-viz
+  $wheel-height: 70px
+  $wheel-width: 30px
+  $container-width: 220px
+  $container-height: 320px
+  width: $container-width
+  height: $container-height
+
+  .wheel
+    width: $wheel-width
+    height: $wheel-height
+    border: 1px solid $color-border
+    border-radius: 10px
+    position: absolute
+
+    &.front
+      top: $wheel-height * 0.5
+
+    &.rear
+      bottom: $wheel-height * 0.5
+      transform: translate(-50%, -50%)
+
+    &.left
+      left: $wheel-height * 0.5
+
+    &.right
+      right: $wheel-height * 0.5
+
+
+    .value
+      bottom: -50%
+      left: 50%
+      text-align: center
+      position: absolute
+      transform: translate(-50%, -50%)

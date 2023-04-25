@@ -33,8 +33,9 @@ const loop = () => {
             const leftBumper = gamepad.buttons[6].value || 0
             const rightBumper = gamepad.buttons[7].value || 0
             const throttleMix = rightBumper - leftBumper
-            throttleTarget += throttleMix
-            steerTarget += gamepad.axes[0] || 0
+            const leftStickXAxis = gamepad.axes[0] || 0
+            throttleTarget += Math.sign(throttleMix) * Math.pow(throttleMix, 2)
+            steerTarget += Math.sign(leftStickXAxis) * Math.pow(leftStickXAxis, 2)
         }
     }
 
