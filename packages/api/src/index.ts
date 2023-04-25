@@ -17,7 +17,7 @@ board.open((error) => {
         ws.on("message", (binary) => {
             const data = binary.toString().trim()
             if (data === BYTE_PING) ws.send(BYTE_PING)
-            if (data.startsWith(BYTE_MOVE)) ws.send(data)
+            if (data.startsWith(BYTE_MOVE)) board.write(data)
         })
     })
 
