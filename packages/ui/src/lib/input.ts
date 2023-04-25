@@ -1,3 +1,5 @@
+import { store } from "../store"
+import { inputSlice } from "../store/input"
 import { sendMove } from "./websocket"
 
 const KEYBOARD_INPUTS: Record<string, undefined | boolean> = {}
@@ -17,25 +19,26 @@ export const startInputLoop = () => {
 const loop = () => {
     let steerTarget = 0
     let throttleTarget = 0
-    const speed = 0.1
+    const keyboardSpeed = 0.1
 
-    if(KEYBOARD_INPUTS["KeyA"]) steerTarget--
-    if(KEYBOARD_INPUTS["KeyD"]) steerTarget++
-    if(KEYBOARD_INPUTS["KeyW"]) throttleTarget += speed
-    if(KEYBOARD_INPUTS["KeyS"]) throttleTarget -= speed
+    if (KEYBOARD_INPUTS["KeyA"]) steerTarget--
+    if (KEYBOARD_INPUTS["KeyD"]) steerTarget++
+    if (KEYBOARD_INPUTS["KeyW"]) throttleTarget += keyboardSpeed
+    if (KEYBOARD_INPUTS["KeyS"]) throttleTarget -= keyboardSpeed
 
     const gamepads = navigator.getGamepads()
-    
-    for(const gamepad of gamepads){
-        if(gamepad?.id === "Xbox 360 Controller (XInput STANDARD GAMEPAD)"){
-            const leftBumper = gamepad.buttons[6].value
-            const rightBumper = gamepad.buttons[7].value
+
+    for (const gamepad of gamepads) {
+        if (gamepad?.id === "Xbox 360 Controller (XInput STANDARD GAMEPAD)") {
+            const leftBumper = gamepad.buttons[6].value || 0
+            const rightBumper = gamepad.buttons[7].value || 0
             const throttleMix = rightBumper - leftBumper
             throttleTarget += throttleMix
-            steerTarget += gamepad.axes[0]
+            steerTarget += gamepad.axes[0] || 0
         }
     }
 
+    store.dispatch(inputSlice.actions.setState({ steerTarget, throttleTarget }))
     sendMove(steerTarget, throttleTarget)
     requestAnimationFrame(loop)
 }

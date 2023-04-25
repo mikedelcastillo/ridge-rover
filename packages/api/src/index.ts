@@ -1,7 +1,6 @@
 import { WebSocketServer } from "ws"
 import { BYTE_BOARD_TX, BYTE_MOVE, BYTE_PING, DEFAULT_PORT } from "./constants"
 import { board, boardParser } from "./serial"
-import { parseBoardSerial } from "./lib/bytes"
 
 console.log("Connecting to board...")
 board.open((error) => {

@@ -17,6 +17,7 @@ function App() {
                 ping: state.websocket.ping,
                 lastPing: state.websocket.lastPing,
                 boardState: state.board.state,
+                inputStatE: state.input,
             }, null, 2)}</pre>
             <button onClick={connect}>Connect</button>
         </>
