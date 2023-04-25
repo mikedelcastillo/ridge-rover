@@ -32,21 +32,20 @@ public:
             digitalWrite(PIN_REN, LOW);
             return;
         }
-        
         digitalWrite(PIN_REN, HIGH);
         digitalWrite(PIN_LEN, HIGH);
 
         int power = abs(targetThrottle) * MAX_PWM_VALUE;
 
-        if (power > 0)
+        if (targetThrottle > 0)
         {
             analogWrite(PIN_RPWM, power);
-            digitalWrite(PIN_LPWM, LOW);
+            analogWrite(PIN_LPWM, 0);
         }
-        if (power < 0)
+        if (targetThrottle < 0)
         {
-            analogWrite(PIN_RPWM, LOW);
-            digitalWrite(PIN_LPWM, power);
+            analogWrite(PIN_RPWM, 0);
+            analogWrite(PIN_LPWM, power);
         }
     };
 };
