@@ -1,5 +1,6 @@
 import { store } from "../store"
 import { inputSlice } from "../store/input"
+import { statsSlice } from "../store/stats"
 import { sendMove } from "./websocket"
 
 const KEYBOARD_INPUTS: Record<string, undefined | boolean> = {}
@@ -39,6 +40,9 @@ const loop = () => {
         }
     }
 
+    store.dispatch(statsSlice.actions.log({ id: "steer", value: steerTarget }))
+    store.dispatch(statsSlice.actions.log({ id: "steerResistance", value: steerTarget - store.getState().board.state.currentSteer }))
+    store.dispatch(statsSlice.actions.log({ id: "throttle", value: throttleTarget }))
     store.dispatch(inputSlice.actions.setState({ steerTarget, throttleTarget }))
     sendMove(steerTarget, throttleTarget)
     requestAnimationFrame(loop)
