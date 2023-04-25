@@ -6,7 +6,9 @@ function App() {
     return (
         <>
             <Header />
-            <RoverViz />
+            <div className="rover-viz-container">
+                <RoverViz />
+            </div>
             <Stats />
         </>
     )
