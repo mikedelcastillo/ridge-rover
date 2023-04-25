@@ -5,7 +5,7 @@
 #define PIN_LPWM 6
 #define PIN_LEN 7
 #define PIN_REN 8
-#define THRESHOLD 0
+#define THRESHOLD 0.05
 
 #define MAX_PWM_VALUE 255
 
