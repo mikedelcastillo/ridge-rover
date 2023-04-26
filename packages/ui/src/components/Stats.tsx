@@ -17,7 +17,7 @@ export const Stat: FC<{ id: keyof typeof STATS }> = ({ id }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const data = useSelector((state: StoreState) => state.stats[id])
     const lastValue = data[data.length - 1]
-    const { title, stringify, min, max, capacity } = STATS[id]
+    const { title, stringify, min, max } = STATS[id]
 
     useEffect(() => {
         const draw = () => {

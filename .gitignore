@@ -1,3 +1,4 @@
 .vscode
 /packages/*/build
 node_modules
+mjpg-streamer
