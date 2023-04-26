@@ -27,8 +27,8 @@ export const Stat: FC<{ id: keyof typeof STATS }> = ({ id }) => {
             if(context === null) return
             if(data.length <= 1) return
 
-            canvas.width = 200
-            canvas.height = 50
+            canvas.width = canvas.offsetWidth
+            canvas.height = canvas.offsetHeight
 
             const y = (value: number) => (1 - ((value - min) / (max - min))) * canvas.height
             

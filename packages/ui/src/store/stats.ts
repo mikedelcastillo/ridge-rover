@@ -9,6 +9,11 @@ type Stat = {
 const motionCapacity = 60 * 5
 
 export const STATS = {
+    ping: {
+        title: "Ping",
+        stringify: n => `${Math.round(n)}ms`,
+        min: 0, max: 20, capacity: 10 * 10,
+    },
     throttle: {
         title: "Input Throttle",
         stringify: n => `${Math.abs(Math.round(n * 100))}%`,
@@ -32,12 +37,12 @@ export const STATS = {
     cpu: {
         title: "CPU",
         stringify: n => `${Math.round(n * 100)}%`,
-        min: 0, max: 1, capacity: 100,
+        min: 0, max: 1, capacity: 2 * 5,
     },
     ram: {
         title: "RAM",
         stringify: n => `${Math.round(n * 100)}%`,
-        min: 0, max: 1, capacity: 100,
+        min: 0, max: 1, capacity: 2 * 5,
     },
 } satisfies Record<string, Stat>
 

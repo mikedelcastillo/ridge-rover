@@ -19,7 +19,7 @@ export const connectWebSocket = () => {
     ws = new WebSocket(`ws://${state.websocket.ip}:${DEFAULT_PORT}`)
     ws.addEventListener("open", () => {
         if (typeof pingInterval === "undefined") {
-            pingInterval = setInterval(sendPing, 1000 / 4)
+            pingInterval = setInterval(sendPing, 1000 / 10)
         }
         store.dispatch(websocketSlice.actions.setStatus(
             WebSocketStatus.CONNECTED
@@ -58,8 +58,9 @@ export const handleMessage = (data: string) => {
     const state = store.getState()
     if (data === BYTE_PING) {
         const now = Date.now()
-        store.dispatch(websocketSlice.actions.setPing(now -
-            state.websocket.lastPing))
+        const ping = now - state.websocket.lastPing
+        store.dispatch(websocketSlice.actions.setPing(ping))
+        store.dispatch(statsSlice.actions.log({ id: "ping", value: ping }))
     }
 
     if (data.startsWith(BYTE_BOARD_TX)) {
