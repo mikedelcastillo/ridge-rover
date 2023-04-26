@@ -43,11 +43,18 @@ html, body, #root
       &.connected
         background-color: #00ff00
 
-.rover-viz-container
+.dashboard-container
   display: flex
-  justify-content: center
+  justify-content: space-between
   align-items: center
   border-bottom: 1px solid $color-border
+  padding-right: 3em
+  gap: 3em
+  .camera-feed
+    border-right: 1px solid $color-border
+    &, img
+      display: block
+      width: 100%
 
 .rover-viz
   $width: 350px
