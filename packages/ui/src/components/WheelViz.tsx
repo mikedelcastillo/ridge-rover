@@ -34,6 +34,10 @@ export const WheelViz: FC = () => {
 
     return (
         <div className="wheel-viz">
+            <div className="gear-viz">
+                <div className="gear">{state.input.gear}</div>
+                <div className="label">Gear</div>
+            </div>
             <div
                 className="wheel front left"
                 style={{
