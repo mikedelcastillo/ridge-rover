@@ -61,6 +61,6 @@ void transmit()
   Serial.print((char) comms.encodeFloatRange(steering.currentSteer));
   Serial.print((char) comms.encodeFloatRange(steering.targetSteer));
   Serial.print((char) comms.encodeFloatRange(throttle.targetThrottle));
-  Serial.print(wheelEncoder.tps);
+  Serial.print(wheelEncoder.getTps());
   Serial.print("\n");
 }
