@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
+import { WHEEL_ENCODER_SAMPLING_DURATION_MS } from "@ridge-rover/api/src/constants"
 
 type Stat = {
     title: string,
@@ -9,10 +10,10 @@ type Stat = {
 const motionCapacity = 60 * 5
 
 export const STATS = {
-    ping: {
-        title: "Ping",
-        stringify: n => `${Math.round(n)}ms`,
-        min: 0, max: 20, capacity: 10 * 10,
+    speed: {
+        title: "Speed",
+        stringify: n => `${n.toFixed(2)}km/h`,
+        min: 0, max: 100, capacity: Math.round(1000 / WHEEL_ENCODER_SAMPLING_DURATION_MS) * 5,
     },
     throttle: {
         title: "Input Throttle",
@@ -33,6 +34,11 @@ export const STATS = {
         title: "Steer Resistance",
         stringify: n => `${Math.round(n * 45)}°`,
         min: -1, max: 1, capacity: motionCapacity,
+    },
+    ping: {
+        title: "Ping",
+        stringify: n => `${Math.round(n)}ms`,
+        min: 0, max: 20, capacity: 10 * 10,
     },
     cpu: {
         title: "CPU",

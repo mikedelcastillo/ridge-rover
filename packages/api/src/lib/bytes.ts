@@ -29,9 +29,11 @@ export const parseBoardSerial = (line: string): BoardState => {
     const currentSteer = byteToRange(line[1] || BYTE_ZERO)
     const targetSteer = byteToRange(line[2] || BYTE_ZERO)
     const targetThrottle = byteToRange(line[3] || BYTE_ZERO)
+    const wheelTps = Number(line.substring(4))
 
     return {
         steerState, currentSteer, targetSteer, targetThrottle,
+        wheelTps,
     }
 }
 

@@ -2,12 +2,14 @@ import { store } from "../store"
 import { boardSlice } from "../store/board"
 import { statsSlice } from "../store/stats"
 import { WebSocketStatus, websocketSlice } from "../store/websocket"
-import { DEFAULT_PORT, BYTE_PING, BYTE_BOARD_TX, BYTE_OS } from "@ridge-rover/api/src/constants.ts"
+import { DEFAULT_PORT, BYTE_PING, BYTE_BOARD_TX, BYTE_OS, WHEEL_ENCODER_SAMPLING_DURATION_MS } from "@ridge-rover/api/src/constants.ts"
 import { byteToRange, formatMove, parseBoardSerial } from "@ridge-rover/api/src/lib/bytes"
+import { logSpeed } from "./speed"
 
 export let ws: WebSocket | undefined
 
 let pingInterval: NodeJS.Timer | undefined
+let speedInterval: NodeJS.Timer | undefined
 
 export const connectWebSocket = () => {
     const state = store.getState()
@@ -20,6 +22,7 @@ export const connectWebSocket = () => {
     ws.addEventListener("open", () => {
         if (typeof pingInterval === "undefined") {
             pingInterval = setInterval(sendPing, 1000 / 10)
+            speedInterval = setInterval(logSpeed, WHEEL_ENCODER_SAMPLING_DURATION_MS)
         }
         store.dispatch(websocketSlice.actions.setStatus(
             WebSocketStatus.CONNECTED

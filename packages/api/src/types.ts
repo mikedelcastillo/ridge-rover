@@ -10,4 +10,5 @@ export type BoardState = {
     currentSteer: number, 
     targetSteer: number,
     targetThrottle: number,
+    wheelTps: number,
 }

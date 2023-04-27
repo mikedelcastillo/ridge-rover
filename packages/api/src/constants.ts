@@ -14,3 +14,4 @@ export const BYTE_MOVE = "~"
 export const BYTE_BOARD_TX = "%"
 export const BYTE_OS = "*"
 
+export const WHEEL_ENCODER_SAMPLING_DURATION_MS = 20

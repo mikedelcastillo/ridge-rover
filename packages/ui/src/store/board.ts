@@ -11,6 +11,7 @@ const initialState: BoardStoreState = {
         currentSteer: 0,
         targetSteer: 0,
         targetThrottle: 0,
+        wheelTps: 0,
     },
 }
 
