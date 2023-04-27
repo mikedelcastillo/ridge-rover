@@ -1,6 +1,8 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import { WHEEL_ENCODER_SAMPLING_DURATION_MS } from "@ridge-rover/api/src/constants"
 import { MAX_KPH, MOTOR_MAX_RPM } from "../lib/speed"
+import { useSelector } from "react-redux"
+import { StoreState } from "."
 
 type Stat = {
     title: string,
@@ -81,3 +83,8 @@ export const statsSlice = createSlice({
         },
     },
 })
+
+export const useStatValue = (id: keyof typeof STATS) => {
+    const state = useSelector((state: StoreState) => state.stats)
+    return state[id]?.[state[id].length - 1] || STATS[id].min
+}
