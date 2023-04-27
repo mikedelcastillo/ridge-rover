@@ -9,6 +9,7 @@ function App() {
             <Header />
             <div className="dashboard-container">
                 <CameraFeed />
+                <div className="vertical-line" />
                 <RoverViz />
             </div>
             <Stats />

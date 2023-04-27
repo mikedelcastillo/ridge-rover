@@ -47,20 +47,26 @@ html, body, #root
   display: flex
   justify-content: space-between
   align-items: center
-  border-bottom: 1px solid $color-border
   padding-right: 3em
-  gap: 3em
-  .camera-feed
+  border-bottom: 1px solid $color-border
+  .vertical-line
+    height: 100%
     border-right: 1px solid $color-border
+  .camera-feed
     &, img
       display: block
       width: 100%
+
+  .rover-viz
+    margin-left: 3em
 
 .rover-viz
   $width: 350px
   $height: 400px
   width: $width
   height: $height
+  flex-grow: 0
+  flex-shrink: 0
 
   // transform: translate(-50%, -50%)
   // top: 45%
