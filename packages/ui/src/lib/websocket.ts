@@ -20,10 +20,9 @@ export const connectWebSocket = () => {
 
     ws = new WebSocket(`ws://${state.websocket.ip}:${DEFAULT_PORT}`)
     ws.addEventListener("open", () => {
-        if (typeof pingInterval === "undefined") {
-            pingInterval = setInterval(sendPing, 1000 / 10)
-            speedInterval = setInterval(logSpeed, WHEEL_ENCODER_SAMPLING_DURATION_MS)
-        }
+        if (typeof pingInterval === "undefined") pingInterval = setInterval(sendPing, 1000 / 10)
+        if (typeof speedInterval === "undefined") speedInterval = setInterval(logSpeed, WHEEL_ENCODER_SAMPLING_DURATION_MS)
+
         store.dispatch(websocketSlice.actions.setStatus(
             WebSocketStatus.CONNECTED
         ))
