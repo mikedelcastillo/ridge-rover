@@ -1,17 +1,20 @@
 
 #include "steering.h"
 #include "throttle.h"
+#include "encoder.h"
 #include "comms.h"
 #include "timing.h"
 
 Steering steering;
 Throttle throttle;
+WheelEncoder wheelEncoder;
 Comms comms;
 
 void setup()
 {
   steering.setup();
   throttle.setup();
+  wheelEncoder.setup();
   comms.setup();
 }
 
@@ -19,10 +22,12 @@ void loop()
 {
   comms.update();
   receive();
-  transmit();
 
   steering.update();
   throttle.update();
+  wheelEncoder.update();
+
+  transmit();
 }
 
 void receive()
@@ -56,5 +61,6 @@ void transmit()
   Serial.print((char) comms.encodeFloatRange(steering.currentSteer));
   Serial.print((char) comms.encodeFloatRange(steering.targetSteer));
   Serial.print((char) comms.encodeFloatRange(throttle.targetThrottle));
+  Serial.print(wheelEncoder.tps);
   Serial.print("\n");
 }
